@@ -5,11 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0BA8F7FA-A47A-48FE-8E0C-C9ADD1FA11A6}</ProjectGuid>
+    <ProjectGuid>{3F738A5F-6CA7-41EF-A420-717C48FED6B8}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>CSharpKit</RootNamespace>
-    <AssemblyName>CSharpKit</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>CSharpKitUnitTests</RootNamespace>
+    <AssemblyName>CSharpKitUnitTests</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,13 +38,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyClass.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Validity\Check.cs" />
-    <Compile Include="DSP\Filter.cs" />
+    <Compile Include="DSP\FilterTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Validity\" />
-    <Folder Include="DSP\" />
+    <ProjectReference Include="..\CSharpKit.csproj">
+      <Project>{0BA8F7FA-A47A-48FE-8E0C-C9ADD1FA11A6}</Project>
+      <Name>CSharpKit</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
