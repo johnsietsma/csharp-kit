@@ -1,5 +1,10 @@
 
 obj
 
+*.pidb
+*.userprefs
+
 # mstest test results
 TestResults
+test-results
+
