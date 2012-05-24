@@ -43,11 +43,13 @@
     <Compile Include="Validity\Check.cs" />
     <Compile Include="DSP\Filter.cs" />
     <Compile Include="IEnumerableExtensions\IEnumerableExtensions.cs" />
+    <Compile Include="ObJectExtensions\ObjectExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Validity\" />
     <Folder Include="DSP\" />
     <Folder Include="IEnumerableExtensions\" />
+    <Folder Include="ObJectExtensions\" />
   </ItemGroup>
 </Project>
