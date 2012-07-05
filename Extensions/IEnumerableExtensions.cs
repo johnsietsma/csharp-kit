@@ -21,5 +21,11 @@ public static class IEnumerableExtensions
             action( item );
         }
     }
+
+    public static int Sum<T>( this IEnumerable<T> items, Func<T,int> p ) {
+        int ret = 0;
+        items.ForEach( c=>ret+=p(c));
+        return ret;
+    }
 }
 
