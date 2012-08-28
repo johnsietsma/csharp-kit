@@ -54,7 +54,6 @@
   <ItemGroup>
     <Folder Include="Validity\" />
     <Folder Include="DSP\" />
-    <Folder Include="IEnumerableExtensions\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>
