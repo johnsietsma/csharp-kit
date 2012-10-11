@@ -31,12 +31,21 @@ public class Timeline<ParamType,EntityType>
             keyframeLength = keyframes[1].time; // Prime the time to switch to the next keyframe
             currIndex = 0;
             nextIndex = 1;
+
+            // Start the keyframe off
+            DoTween( keyframes[currIndex].value, keyframes[nextIndex].value, 0 );
         }
 
         if( elapsedTime > keyframeStartTime+keyframeLength ) {
+            // End the new keyframe
+            DoTween( keyframes[currIndex].value, keyframes[nextIndex].value, 1 );
+
             // start the next keyframe
             currIndex = (currIndex+1)%keyframes.Length;
             nextIndex = (nextIndex+1)%keyframes.Length;
+
+            // Start the new keyframe off
+            DoTween( keyframes[currIndex].value, keyframes[nextIndex].value, 0 );
 
             keyframeStartTime += keyframes[currIndex].time;
             keyframeLength = keyframes[nextIndex].time;
@@ -46,12 +55,20 @@ public class Timeline<ParamType,EntityType>
         Keyframe<ParamType> nextKeyframe = keyframes[nextIndex];
 
         float elapsedTimeNorm = keyframeLength==0 ? 1 : (elapsedTime-keyframeStartTime)/keyframeLength;
+        
+        DoTween( currKeyframe.value, nextKeyframe.value, elapsedTimeNorm );
+    }
 
+    private void DoTween( ParamType param1, ParamType param2, float t ) {
         // Do the tween
-        ParamType tweenedKeyframeParams = tweenFunction( currKeyframe.value, nextKeyframe.value, elapsedTimeNorm );
-
+        ParamType tweenedKeyframeParams = tweenFunction( param1, param2, t );
+        
         // Apply the result to the timeline entity
         applyKeyframeParameters( timelineEntity, tweenedKeyframeParams );
+    }
+
+    private void StartNewKeyframe() {
+        
     }
 }
 
