@@ -66,10 +66,6 @@ public class Timeline<ParamType,EntityType>
         // Apply the result to the timeline entity
         applyKeyframeParameters( timelineEntity, tweenedKeyframeParams );
     }
-
-    private void StartNewKeyframe() {
-        
-    }
 }
 
 }
