@@ -15,6 +15,9 @@ public static class ListExtensions
 
     public static void Shuffle<T>( this IList<T> list )
     {
+        if ( list.Count == 0 )
+            return;
+
         Random rand = new Random();
         for (int i = 0; i < list.Count; i++ ) {
             int j = rand.Next( 0, list.Count );

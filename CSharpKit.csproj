@@ -53,6 +53,7 @@
     <Compile Include="Keyframe\Timeline.cs" />
     <Compile Include="Keyframe\Tests\TimelineTests.cs" />
     <Compile Include="Keyframe\Keyframe.cs" />
+    <Compile Include="Extensions\IntExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
