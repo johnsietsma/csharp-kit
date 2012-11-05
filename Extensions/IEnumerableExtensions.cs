@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class IEnumerableExtensions
 {
@@ -39,6 +40,14 @@ public static class IEnumerableExtensions
                 yield return func(iteratorA.Current, iteratorB.Current);
             }
         }
+    }
+
+    // Not thread-safe.
+    // Taken from 'http://stackoverflow.com/questions/273313/randomize-a-listt-in-c-sharp'.
+    public static IEnumerable<T> Randomize<T>(this IEnumerable<T> source)
+    {
+        Random rnd = new Random();
+        return source.OrderBy<T, int>( e => rnd.Next() );
     }
 }
 

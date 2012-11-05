@@ -28,6 +28,15 @@ public static class Check
         }
     }
 
+	/* trying for a generic equals
+	public static void Equal<T> (T a, T b, string message="")
+	{
+		if (EqualityComparer<T>.Default.Equals(a, b) == false) {
+			message = message != "" ? message : string.Format ("{0} is not equal to {1}", a, b);
+			Error (message);
+		}
+	} */
+
     public static void NotEqual( int a, int b, string message="" )
     {
         if( a == b ) {
