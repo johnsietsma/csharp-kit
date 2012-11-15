@@ -30,7 +30,7 @@ public static class ListExtensions
     public static T RandomElement<T>( this IList<T> list )
     {
         Random rand = new Random();
-        int index = rand.Next( 0, list.Count );
+        int index = rand.Next( list.Count );
         return list[index];
     }
 }
