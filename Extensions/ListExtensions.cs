@@ -3,6 +3,8 @@ using System;
 
 public static class ListExtensions
 {
+    static Random random = new Random();
+
     public static void Remove<T> (this IList<T> list, IEnumerable<T> toRemove)
     {
         if (list == null || toRemove == null)
@@ -18,9 +20,8 @@ public static class ListExtensions
         if ( list.Count == 0 )
             return;
 
-        Random rand = new Random();
         for (int i = 0; i < list.Count; i++ ) {
-            int j = rand.Next( 0, list.Count );
+            int j = random.Next( 0, list.Count );
             T temp = list[i];
             list[i] = list[j];
             list[j] = temp;
@@ -29,8 +30,7 @@ public static class ListExtensions
 
     public static T RandomElement<T>( this IList<T> list )
     {
-        Random rand = new Random();
-        int index = rand.Next( 0, list.Count );
+        int index = random.Next( 0, list.Count );
         return list[index];
     }
 }
