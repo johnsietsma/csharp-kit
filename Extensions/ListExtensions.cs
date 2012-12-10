@@ -30,6 +30,8 @@ public static class ListExtensions
 
     public static T RandomElement<T>( this IList<T> list )
     {
+        if( list.Count==0 ) return default(T);
+
         int index = random.Next( 0, list.Count );
         return list[index];
     }

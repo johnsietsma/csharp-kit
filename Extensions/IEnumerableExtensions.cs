@@ -41,13 +41,5 @@ public static class IEnumerableExtensions
             }
         }
     }
-
-    // Not thread-safe.
-    // Taken from 'http://stackoverflow.com/questions/273313/randomize-a-listt-in-c-sharp'.
-    public static IEnumerable<T> Randomize<T>(this IEnumerable<T> source)
-    {
-        Random rnd = new Random();
-        return source.OrderBy<T, int>( e => rnd.Next() );
-    }
 }
 
