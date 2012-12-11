@@ -3,6 +3,8 @@ obj/
 
 *.pidb
 *.userprefs
+*.swp
+*.swo
 
 # mstest test results
 TestResults
