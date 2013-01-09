@@ -54,6 +54,7 @@
     <Compile Include="Keyframe\Tests\TimelineTests.cs" />
     <Compile Include="Keyframe\Keyframe.cs" />
     <Compile Include="Extensions\IntExtensions.cs" />
+    <Compile Include="Enums\Enums.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -61,5 +62,6 @@
     <Folder Include="DSP\" />
     <Folder Include="Extensions\" />
     <Folder Include="Keyframe\Tests\" />
+    <Folder Include="Enums\" />
   </ItemGroup>
 </Project>
