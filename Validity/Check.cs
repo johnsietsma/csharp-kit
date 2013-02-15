@@ -83,6 +83,6 @@ public static class Check
 
     public static void NotNullOrEmpty( string str, string message="Null or empty string" )
     {
-        False( string.IsNullOrEmpty(str) );
+        False( string.IsNullOrEmpty(str), message );
     }
 }
