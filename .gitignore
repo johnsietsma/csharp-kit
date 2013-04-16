@@ -10,3 +10,5 @@ obj/
 TestResults
 test-results
 
+*.sublime-workspace
+
