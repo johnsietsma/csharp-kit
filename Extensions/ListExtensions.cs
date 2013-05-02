@@ -27,12 +27,4 @@ public static class ListExtensions
             list[j] = temp;
         }
     }
-
-    public static T RandomElement<T>( this IList<T> list )
-    {
-        Check.NotEqual( list.Count, 0, "Cannot select random element from list of length 0" );
-
-        int index = random.Next( 0, list.Count );
-        return list[index];
-    }
 }
