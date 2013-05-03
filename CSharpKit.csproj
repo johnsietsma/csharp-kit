@@ -41,20 +41,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Validity\Check.cs" />
     <Compile Include="DSP\Filter.cs" />
-    <Compile Include="Extensions\ObjectExtensions.cs" />
-    <Compile Include="Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
-    <Compile Include="Keyframe\Timeline.cs" />
-    <Compile Include="Keyframe\Tests\TimelineTests.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Keyframe\Keyframe.cs" />
-    <Compile Include="Extensions\IntExtensions.cs" />
-    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Keyframe\Tests\TimelineTests.cs" />
+    <Compile Include="Keyframe\Timeline.cs" />
+    <Compile Include="PropertyBag\Property.cs" />
+    <Compile Include="PropertyBag\PropertyBag.cs" />
+    <Compile Include="Validity\Check.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
