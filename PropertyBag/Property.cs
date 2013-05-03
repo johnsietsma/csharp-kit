@@ -74,4 +74,9 @@ public class Property : System.Object
     }
 
     #endregion
+
+    public override string ToString() 
+    {
+        return string.Format("[Property {0}:{1}]", Name, Value);
+    }
 }

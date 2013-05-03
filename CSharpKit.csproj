@@ -52,10 +52,11 @@
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Keyframe\Keyframe.cs" />
-    <Compile Include="Keyframe\Tests\TimelineTests.cs" />
+    <Compile Include="Keyframe\Tests\TestTimeline.cs" />
     <Compile Include="Keyframe\Timeline.cs" />
     <Compile Include="PropertyBag\Property.cs" />
     <Compile Include="PropertyBag\PropertyBag.cs" />
+    <Compile Include="PropertyBag\Tests\TestPropertyBag.cs" />
     <Compile Include="Validity\Check.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

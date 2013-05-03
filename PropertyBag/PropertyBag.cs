@@ -61,4 +61,9 @@ public class PropertyBag : System.Object
         Property p = this[name];
         return (T)p.Value;
     }
+
+    public override string ToString()
+    {
+        return string.Format("[PropertyBag: {0}]", _propCollection.Values.ToStringJoin() );
+    }
 }
