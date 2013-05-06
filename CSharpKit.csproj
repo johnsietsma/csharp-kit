@@ -54,6 +54,9 @@
     <Compile Include="Keyframe\Keyframe.cs" />
     <Compile Include="Keyframe\Tests\TestTimeline.cs" />
     <Compile Include="Keyframe\Timeline.cs" />
+    <Compile Include="Message\Messages.cs" />
+    <Compile Include="Message\MessageRegister.cs" />
+    <Compile Include="Message\MessageSystem.cs" />
     <Compile Include="PropertyBag\Property.cs" />
     <Compile Include="PropertyBag\PropertyBag.cs" />
     <Compile Include="PropertyBag\Tests\TestPropertyBag.cs" />
