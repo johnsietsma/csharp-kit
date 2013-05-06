@@ -2,110 +2,133 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
+/// <summary>
+/// MessageSystem is a type-safe messagin system.
+/// </summary>
 public static class MessageSystem
 {
+    /// <summary>
+    /// A wrapper that takes a generic listener<T> and put's a non-generic wrapper around it.
+    /// This allows a collections of listener<T>s with different Type params.
+    /// </summary>
     private class ActionWrapper
     {
-        private Action<object> action;
+        public Action<object> listener { get; set; }
+        public Type ParamType { get; private set; }
 
-        object innerAction;
-
-        public void SetAction<T>( Action<T> genericAction )
+        public void Call<T>( T param )
         {
-            innerAction = genericAction;
-            action = o => genericAction( ( T ) o );
+            listener( param );
         }
 
-        public bool HasAction( object action )
+        public static ActionWrapper Create<T>( Action<T> listener )
         {
-            return innerAction == action;
-        }
-
-        public void CallAction<T>( T param )
-        {
-            action( param );
-        }
-
-        public static ActionWrapper Create<T>( Action<T> genericAction )
-        {
-            Check.NotNull( genericAction );
+            Check.NotNull( listener );
 
             ActionWrapper wrapper = new ActionWrapper();
-            wrapper.SetAction( genericAction );
+            wrapper.listener = listener as Action<object>;
+            wrapper.ParamType = typeof( T );
             return wrapper;
         }
     }
 
-    static Dictionary<Type, List<ActionWrapper>> listeners = new Dictionary<Type, List<ActionWrapper>>();
+    /// A dictionary that maps message types to message listeners.
+    private static Dictionary<Type, List<ActionWrapper>> typeListenersMap = new Dictionary<Type, List<ActionWrapper>>();
 
+    public static IEnumerable<Action<TParam>> GetListeners<TMessage, TParam>() where TMessage : IMessage<TParam> {
+        Type key =typeof( TMessage );
+        if( typeListenersMap.ContainsKey( key ) ) { return typeListenersMap[key].Select( aw=>aw.listener as Action<TParam> ); }
+        return Enumerable.Empty<Action<TParam>>();
+    }
+
+
+    /// <summary>
+    /// Send a message of type TMessage to all listeners.
+    /// <param name="param">The parameter to send with the message</param>
+    /// </summary>
     public static void Send<TMessage,TParam>( TParam param ) where TMessage : IMessage<TParam> {
         List<ActionWrapper> listenerList;
-        if( listeners.TryGetValue( typeof( TMessage ), out listenerList ) )
+        if( typeListenersMap.TryGetValue( typeof( TMessage ), out listenerList ) )
         {
             List<ActionWrapper> listenerListCopy = new List<ActionWrapper>( listenerList ); // Take a copy to avoid mutation exceptions
             foreach( var listener in listenerListCopy ) {
-                listener.CallAction<TParam>( param );
+                listener.Call<TParam>( param );
             }
         }
     }
 
-    public static void Add( Type messageType, params Action<object>[] actions )
+    /// <summary>
+    /// The non-generic version of add.
+    /// This allow adding of message listeners without knowing the type ahead of time, eg. from an editor.
+    /// </summary>
+    public static void Add( Type messageType, params Action<object>[] listeners )
     {
-        Check.True( ImplementsIMessage( messageType ), "Message type must implement IMessage." );
+        Check.True( messageType.ImplementsGeneric( typeof( IMessage<> ) ) , "Message type must implement IMessage." );
 
         List<ActionWrapper> listenerList;
-        if( false == listeners.TryGetValue( messageType, out listenerList ) ) {
+        if( false == typeListenersMap.TryGetValue( messageType, out listenerList ) ) {
             listenerList = new List<ActionWrapper>();
-            listeners.Add( messageType, listenerList );
+            typeListenersMap.Add( messageType, listenerList );
         }
 
-        listenerList.AddRange( actions.Select( a => ActionWrapper.Create( a ) ) );
+        listenerList.AddRange( listeners.Select( a => ActionWrapper.Create( a ) ) );
     }
 
-    public static void Remove( Type messageType, params Action<object>[] actions )
+    /// <summary>
+    /// The generic version of Add. Add a strongly typed message listener.
+    /// </summary>
+    public static void Add<TMessage, TParam>( params Action<TParam>[] listeners ) where TMessage : IMessage<TParam> {
+        Add( typeof( TMessage ), Array.ConvertAll<Action<TParam>, Action<object>>( listeners, a=>a as Action<object> ) );
+    }
+
+    /// <summary>
+    /// Remove the given listeners associated with the given message type.
+    /// </summary>
+    public static int Remove( Type messageType, params Action<object>[] listeners )
     {
-        Check.True( ImplementsIMessage( messageType ), "Message type must implement IMessage." );
+        Check.True( messageType.ImplementsGeneric( typeof( IMessage<> ) ), "Message type must implement IMessage." );
 
         List<ActionWrapper> listenerList;
-        if( listeners.TryGetValue( messageType, out listenerList ) ) {
-            foreach( var action in actions ) {
-                listenerList.RemoveAll( w => w.HasAction( action ) );
-            }
+        if( typeListenersMap.TryGetValue( messageType, out listenerList ) ) {
+            return listenerList.RemoveAll( l=>listeners.Contains( l.listener ) );
         }
+        return 0;
     }
 
-    public static void Add<TMessage, TParam>( params Action<TParam>[] actions ) where TMessage : IMessage<TParam> {
-        List<ActionWrapper> listenerList;
-        if( false == listeners.TryGetValue( typeof( TMessage ), out listenerList ) )
-        {
-            listenerList = new List<ActionWrapper>();
-            listeners.Add( typeof( TMessage ), listenerList );
-        }
-
-        listenerList.AddRange( actions.Select( a => ActionWrapper.Create( a ) ) );
+    /// <summary>
+    /// The generic version of Remove.
+    /// </summary>
+    public static int Remove<TMessage, TParam>( params Action<TParam>[] listeners ) where TMessage : IMessage<TParam> {
+        return Remove( typeof( TMessage ), Array.ConvertAll<Action<TParam>, Action<object>>( listeners, a=>a as Action<object> ) );
     }
 
-    public static void Remove<TMessage, TParam>( params Action<TParam>[] actions ) where TMessage : IMessage<TParam> {
-        List<ActionWrapper> listenerList;
-        if( listeners.TryGetValue( typeof( TMessage ), out listenerList ) )
-        {
-            foreach( var action in actions ) {
-                listenerList.RemoveAll( w => w.HasAction( action ) );
-            }
-        }
-    }
-
-    public static IEnumerable<Action<TParam>> GetListeners<TMessage, TParam>() where TMessage : IMessage<TParam> {
-        foreach( Action<TParam> listener in listeners.Cast<Action<TParam>>() )
-        {
-            yield return listener;
-        }
-    }
-
-    private static bool ImplementsIMessage( Type type )
+    /// <summary>
+    /// Remove the given listeners associated with the given message type.
+    /// </summary>
+    public static bool RemoveAll( Type messageType )
     {
-        return type.GetInterfaces()
-               .Any( i => i.IsGenericType
-                     && i.GetGenericTypeDefinition() == typeof( IMessage<> ) );
+        Check.True( messageType.ImplementsGeneric( typeof( IMessage<> ) ), "Message type must implement IMessage." );
+        if( typeListenersMap.ContainsKey( messageType ) ) {
+            typeListenersMap[messageType].Clear();
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// The generic version of Remove.
+    /// </summary>
+    public static bool RemoveAll<TMessage,TParam>() where TMessage : IMessage<TParam> {
+
+        return RemoveAll( typeof( TMessage ) );
+    }
+
+
+    /// <summary>
+    /// Clear all the listeners. from every message type.
+    /// </summary>
+    public static void Clear()
+    {
+        typeListenersMap.Clear();
     }
 }
