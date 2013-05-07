@@ -3,6 +3,11 @@ using System;
 public static class ArrayExtensions
 {
 
+    public static TOutput[] ConvertAll<TInput,TOutput>( this TInput[] input, Func<TInput,TOutput> converter )
+    {
+        return Array.ConvertAll<TInput,TOutput>( input, i=>converter(i) );
+    }
+
     public static T[] RemoveAt<T> (this T[] source, int index)
     {
         if (source == null)

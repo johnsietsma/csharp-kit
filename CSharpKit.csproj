@@ -31,16 +31,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.core, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
-      <Private>False</Private>
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="nunit.core, Version=2.6.2.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <HintPath>..\nunit.core.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
-      <Private>False</Private>
+    <Reference Include="nunit.framework, Version=2.6.2.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <HintPath>..\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Collections\CircularBuffer.cs" />
     <Compile Include="DSP\Filter.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
@@ -48,21 +49,29 @@
     <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Keyframe\Keyframe.cs" />
     <Compile Include="Keyframe\Tests\TestTimeline.cs" />
     <Compile Include="Keyframe\Timeline.cs" />
+    <Compile Include="Message\MessageSender.cs" />
+    <Compile Include="Message\IMessageSender.cs" />
+    <Compile Include="Message\MessageDecorator.cs" />
+    <Compile Include="Message\FilterMessageDecorator.cs" />
+    <Compile Include="Message\CircularLogMessageDecorator.cs" />
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\MessageRegister.cs" />
     <Compile Include="Message\MessageSystem.cs" />
     <Compile Include="Message\Tests\TestMessageSystem.cs" />
+    <Compile Include="Message\Tests\TestFilterMessageDecorator.cs" />
     <Compile Include="PropertyBag\Property.cs" />
     <Compile Include="PropertyBag\PropertyBag.cs" />
     <Compile Include="PropertyBag\Tests\TestPropertyBag.cs" />
     <Compile Include="Validity\Check.cs" />
+    <Compile Include="Validity\CheckException.cs" />
+    <Compile Include="Validity\Tests\TestCheck.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
