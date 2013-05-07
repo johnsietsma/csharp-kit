@@ -7,9 +7,10 @@ public class MessageDecorator : IMessageSender
 {
     public IMessageSender MessageSender { get; private set; }
 
-    public Action<object> Action { get { return MessageSender.Action; } }
     public Type MessageType { get { return MessageSender.MessageType; } }
     public Type ParamType { get { return MessageSender.ParamType; } }
+    public object OriginalAction { get { return MessageSender.OriginalAction; } }
+    public Action<T> GetAction<T>() { return MessageSender.GetAction<T>(); }
 
     public MessageDecorator( IMessageSender messageSender )
     {

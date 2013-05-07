@@ -2,7 +2,7 @@ using System;
 using NUnit.Framework;
 
 [TestFixture]
-public class TestFilterMessageDecorator
+public class TestMessageFilterer
 {
     [Test]
     public void TestFilter_True()
@@ -10,10 +10,10 @@ public class TestFilterMessageDecorator
         bool isCalled = false;
         Action<object> action1 = (o)=>isCalled=true;
 
-        IMessageSender sender = MessageSender.Create<Message1,object>( action1 );
-        sender = new FilterMessageDecorator( sender, (mt,pt,p)=>!mt.Name.EndsWith("1") );
+        IMessageSender sender = MessageSenderBuilder<Message1>.Create( action1 );
+        sender = new MessageFilterer( sender, (mt,pt,p)=>mt.Name.EndsWith("1") );
 
-        MessageSystem.Add<Message1>( sender );
+        MessageSystem.Add( sender );
 
         MessageSystem.Send<Message1,object>( null );
 

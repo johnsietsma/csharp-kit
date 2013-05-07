@@ -1,45 +1,27 @@
 using System;
 using System.Collections.Generic;
-    
+
 /// <summary>
 /// An instantiable helper class that can subscribe and unsubscribe from
 /// <c>MessageSystem</c> events.
 /// </summary>
 public class MessageRegister
 {
-    IList<Action> removals = new List<Action>();
+    List<IMessageSender> removals = new List<IMessageSender>();
 
-    public void Add( Type messageType, params Action<object>[] actions )
+    public void Add<TParam>( Type messageType, params Action<TParam>[] actions )
     {
-        MessageSystem.Add( messageType, actions );
-        removals.Add( () => {
-            var localActions = actions;
-            MessageSystem.Remove( messageType, localActions );
-        } );
-    }
-
-    public void Remove( Type messageType, params Action<object>[] actions )
-    {
-        MessageSystem.Remove( messageType, actions );
+        IMessageSender[] senders = MessageSystem.Add<TParam>( messageType, actions );
+        senders.ForEach( s=>removals.Add( s ) );
     }
 
     public void Add<TMessage, TParam>( params Action<TParam>[] actions ) where TMessage : IMessage<TParam> {
-        MessageSystem.Add<TMessage, TParam>( actions );
-        removals.Add( () => {
-            var localActions = actions;
-            MessageSystem.Remove<TMessage, TParam>( localActions );
-        } );
-    }
-
-    public void Remove<TMessage, TParam>( params Action<TParam>[] actions ) where TMessage : IMessage<TParam> {
-        MessageSystem.Remove<TMessage, TParam>( actions );
+        Add<TParam>( typeof( TMessage ), actions );
     }
 
     public void Clear()
     {
-        foreach( Action removal in removals ) {
-            removal();
-        }
+        MessageSystem.Remove( removals.ToArray() );
         removals.Clear();
     }
 }

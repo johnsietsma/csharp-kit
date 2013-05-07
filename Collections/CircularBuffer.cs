@@ -131,6 +131,7 @@ public class CircularBuffer<T> : ICollection<T>, IEnumerable<T>, ICollection, IE
             tail = 0;
         }
         size++;
+        size = Math.Min( size, capacity );
     }
 
     public void Skip( int count )

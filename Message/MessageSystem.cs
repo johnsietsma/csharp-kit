@@ -32,59 +32,65 @@ public static class MessageSystem
         }
     }
 
-    public static void Add( Type messageType, params IMessageSender[] senders )
+    // ----- Add Functions ----
+    public static IMessageSender Add( IMessageSender sender )
     {
+        Type messageType = sender.MessageType;
         Check.True( messageType.ImplementsGeneric( typeof( IMessage<> ) ) , "Message type must implement IMessage." );
 
-        List<IMessageSender> senderList;
-        if( false == typeSendersMap.TryGetValue( messageType, out senderList ) ) {
-            senderList = new List<IMessageSender>();
-            typeSendersMap.Add( messageType, senderList );
+        if( !typeSendersMap.ContainsKey(messageType) ) {
+            typeSendersMap.Add( messageType, new List<IMessageSender>() );
         }
-
-        senderList.AddRange( senders );
+        typeSendersMap[messageType].Add( sender );
+        return sender;
     }
 
-    public static void Add<TMessage>( params IMessageSender[] senders )
+    public static IMessageSender[] Add( params IMessageSender[] senders )
     {
-        Add( typeof( TMessage ), senders );
-    }
+        Array.ForEach( senders, s=>Add(s) );
+        return senders;
+    }    
 
-    /// <summary>
-    /// The non-generic version of add.
-    /// This allow adding of message sender without knowing the type ahead of time, eg. from an editor.
-    /// </summary>
-    public static void Add( Type messageType, params Action<object>[] senders )
+    public static IMessageSender[] Add<TParam>( Type messageType, params Action<TParam>[] senders )
     {
-        Add( messageType, senders.ConvertAll( s=>MessageSender.Create<object>( messageType, s ) ) );
+        IMessageSender[] msgSenders = senders.ConvertAll( s=>MessageSender.Create<TParam>( messageType, s ) );
+        Add( msgSenders );
+        return msgSenders;
     }
 
-    /// <summary>
-    /// The generic version of Add. Add a strongly typed message sender.
-    /// </summary>
-    public static void Add<TMessage, TParam>( params Action<TParam>[] senders ) where TMessage : IMessage<TParam> {
-        Add( typeof( TMessage ), senders.ConvertAll( s=>s as Action<object> ) );
+    public static IMessageSender[] Add<TMessage, TParam>( params Action<TParam>[] senderActions )  where TMessage : IMessage<TParam> {
+        Type messageType = typeof(TMessage);
+        return Add( senderActions.ConvertAll( s=>MessageSender.Create<TParam>( messageType, s ) ) );
     }
 
-    /// <summary>
-    /// Remove the given senders associated with the given message type.
-    /// </summary>
-    public static int Remove( Type messageType, params Action<object>[] senders )
+    // ----- Remove Functions ----
+    public static int Remove( Type messageType, object sender )
     {
         Check.True( messageType.ImplementsGeneric( typeof( IMessage<> ) ), "Message type must implement IMessage." );
 
-        List<IMessageSender> senderList;
-        if( typeSendersMap.TryGetValue( messageType, out senderList ) ) {
-            return senderList.RemoveAll( l=>senders.Contains( l.Action ) );
+        if( typeSendersMap.ContainsKey(messageType) ) {
+            return typeSendersMap[messageType].RemoveAll( l=>sender==l.OriginalAction );
         }
         return 0;
     }
 
-    /// <summary>
-    /// The generic version of Remove.
-    /// </summary>
-    public static int Remove<TMessage, TParam>( params Action<TParam>[] senders ) where TMessage : IMessage<TParam> {
-        return Remove( typeof( TMessage ), senders.ConvertAll( s=>s as Action<object> ) );
+    public static int Remove<TParam>( Type messageType, params Action<TParam>[] senders )
+    {
+        Check.True( messageType.ImplementsGeneric( typeof( IMessage<> ) ), "Message type must implement IMessage." );
+
+        if( typeSendersMap.ContainsKey(messageType) ) {
+            return typeSendersMap[messageType].RemoveAll( l=>senders.Contains( l.OriginalAction ) );
+        }
+        return 0;
+    }
+
+    public static int Remove<TMessage, TParam>( params Action<TParam>[] senders )  where TMessage : IMessage<TParam> {
+        return Remove( typeof( TMessage ), senders );
+    }
+
+    public static void Remove( IMessageSender[] senders ) 
+    {
+        Array.ForEach<IMessageSender>( senders, s=>Remove( s.MessageType, s.OriginalAction ) );
     }
 
     /// <summary>
@@ -103,7 +109,7 @@ public static class MessageSystem
     /// <summary>
     /// The generic version of Remove.
     /// </summary>
-    public static bool RemoveAll<TMessage,TParam>() where TMessage : IMessage<TParam> {
+    public static bool RemoveAll<TMessage>() {
 
         return RemoveAll( typeof( TMessage ) );
     }
