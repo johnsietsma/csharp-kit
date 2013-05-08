@@ -1,6 +1,5 @@
 using System;
 
-
 /// <summary>
 /// A message decorator to filter messages fromt he MessageSystem.
 /// </summary>
@@ -19,7 +18,7 @@ public class MessageFilterer : MessageDecorator
     public override void Send<TMessage,TParam>( TParam param )
     {
         // Apply the filter
-        if( !Filter( MessageType, ParamType, param ) ) {
+        if( Filter( MessageType, ParamType, param ) ) {
             base.Send<TMessage,TParam>( param );
         }
     }

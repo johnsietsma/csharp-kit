@@ -46,7 +46,7 @@ public class TestMessageHelper
         new MessageHelper().AddEqualityFilter( o ).AddLogging( log ).Add<Message1,object>( (s)=>messageSent=true );
 
         Assert.IsFalse( messageSent );
-        MessageSystem.Send<Message1,object>( null );
+        MessageSystem.Send<Message1,object>( o );
         Assert.IsTrue( messageSent );
 
         Assert.AreEqual( 1, log.Size );

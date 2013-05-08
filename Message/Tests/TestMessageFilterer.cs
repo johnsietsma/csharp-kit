@@ -11,7 +11,7 @@ public class TestMessageFilterer
         Action<object> action1 = (o)=>isCalled=true;
 
         IMessageSender sender = MessageSenderBuilder<Message1>.Create( action1 );
-        sender = new MessageFilterer( sender, (mt,pt,p)=>mt.Name.EndsWith("1") );
+        sender = new MessageFilterer( sender, (mt,pt,p)=>!mt.Name.EndsWith("1") );
 
         MessageSystem.Add( sender );
 

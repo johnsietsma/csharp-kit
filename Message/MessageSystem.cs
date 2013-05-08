@@ -64,12 +64,12 @@ public static class MessageSystem
     }
 
     // ----- Remove Functions ----
-    public static int Remove( Type messageType, object sender )
+    public static int Remove( Type messageType, object senderAction )
     {
         Check.True( messageType.ImplementsGeneric( typeof( IMessage<> ) ), "Message type must implement IMessage." );
 
         if( typeSendersMap.ContainsKey(messageType) ) {
-            return typeSendersMap[messageType].RemoveAll( l=>sender==l.OriginalAction );
+            return typeSendersMap[messageType].RemoveAll( l=>senderAction==l.OriginalAction );
         }
         return 0;
     }
