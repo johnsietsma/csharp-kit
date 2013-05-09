@@ -18,7 +18,13 @@ public class MessageHelper : IDisposable
 
     public void Dispose()
     {
+        Clear();
+    }
+
+    public void Clear()
+    {
         MessageSystem.Remove( senders.ToArray() );
+        senders.Clear();
     }
 
     public IMessageSender Add( IMessageSender sender )
