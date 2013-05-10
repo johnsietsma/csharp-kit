@@ -60,6 +60,12 @@ public class MessageHelper : IDisposable
         return this;
     }
 
+    public MessageHelper AddParamFilter<TParam>( Func<TParam,bool> filter )
+    {
+        decoratorDelegates.Add( MakeParamFilterDelegate<TParam>( filter ) );
+        return this;
+    }
+
     public MessageHelper AddLogging( MessageLog log )
     {
         decoratorDelegates.Add( MakeLoggingDelegate( log ) );
@@ -69,7 +75,13 @@ public class MessageHelper : IDisposable
     public static DecoratorDelegate MakeFilterDelegate( MessageFilterer.MessageFilter filter )
     {
         return ( s )=>new MessageFilterer( s, filter );
-    }    
+    }
+
+    public static DecoratorDelegate MakeParamFilterDelegate<TParam>( Func<TParam,bool> paramFilter )
+    {
+        MessageFilterer.MessageFilter filter = (mt,pt,p)=>paramFilter((TParam)p);
+        return ( s )=>new MessageFilterer( s, filter );
+    }
 
     public static DecoratorDelegate MakeEqualityFilterDelegate( object equalsObject )
     {
