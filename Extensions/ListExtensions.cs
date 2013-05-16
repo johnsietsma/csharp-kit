@@ -5,10 +5,23 @@ public static class ListExtensions
 {
     static Random random = new Random();
 
-    public static void Remove<T> (this IList<T> list, IEnumerable<T> toRemove)
+    public static void Swap<T>( this IList<T> list, int firstIndex, int secondIndex )
     {
-        if (list == null || toRemove == null)
+        Check.NotNull( list );
+        Check.True( firstIndex >= 0 && firstIndex < list.Count );
+        Check.True( secondIndex >= 0 && secondIndex < list.Count );
+        if ( firstIndex == secondIndex ) {
             return;
+        }
+
+        T temp = list[firstIndex];
+        list[firstIndex] = list[secondIndex];
+        list[secondIndex] = temp;
+    }
+
+    public static void Remove<T>(this IList<T> list, IEnumerable<T> toRemove)
+    {
+        Check.NotNull( list );
         
         foreach (T item in toRemove) {
             list.Remove (item);
@@ -18,7 +31,7 @@ public static class ListExtensions
     public static void Shuffle<T>( this IList<T> list )
     {
         if ( list.Count == 0 )
-            return;
+        return;
 
         for (int i = 0; i < list.Count; i++ ) {
             int j = random.Next( 0, list.Count );
