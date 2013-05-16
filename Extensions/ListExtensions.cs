@@ -8,8 +8,9 @@ public static class ListExtensions
     public static void Swap<T>( this IList<T> list, int firstIndex, int secondIndex )
     {
         Check.NotNull( list );
-        Check.True( firstIndex >= 0 && firstIndex < list.Count );
-        Check.True( secondIndex >= 0 && secondIndex < list.Count );
+        CheckInRange( list, firstIndex, "firstIndex" );
+        CheckInRange( list, secondIndex, "secondIndex" );
+
         if ( firstIndex == secondIndex ) {
             return;
         }
@@ -17,6 +18,15 @@ public static class ListExtensions
         T temp = list[firstIndex];
         list[firstIndex] = list[secondIndex];
         list[secondIndex] = temp;
+    }
+
+    static void CheckInRange<T>( IList<T> list, int index, string parameterName )
+    {
+        if( index < 0 || index >= list.Count ) {
+            throw new IndexOutOfRangeException(
+                string.Format( "Parameter '{0}' out of range: {1} < 0 || {1} >= {2} ", parameterName, index, list.Count )
+            );
+        }
     }
 
     public static void Remove<T>(this IList<T> list, IEnumerable<T> toRemove)
