@@ -9,8 +9,6 @@ public class MessageHelper : IDisposable
     private List<DecoratorDelegate> decoratorDelegates = new List<DecoratorDelegate>();
     private List<IMessageSender> senders = new List<IMessageSender>();
 
-    public MessageHelper()  {}
-
     ~MessageHelper()
     {
         Dispose();
@@ -27,7 +25,7 @@ public class MessageHelper : IDisposable
         senders.Clear();
     }
 
-    public IMessageSender Add( IMessageSender sender )
+    public virtual IMessageSender Add( IMessageSender sender )
     {
         foreach( DecoratorDelegate del in decoratorDelegates ) {
             sender = del( sender );
