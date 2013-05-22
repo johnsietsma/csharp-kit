@@ -20,15 +20,6 @@ public static class ListExtensions
         list[secondIndex] = temp;
     }
 
-    static void CheckInRange<T>( IList<T> list, int index, string parameterName )
-    {
-        if( index < 0 || index >= list.Count ) {
-            throw new IndexOutOfRangeException(
-                string.Format( "Parameter '{0}' out of range: {1} < 0 || {1} >= {2} ", parameterName, index, list.Count )
-            );
-        }
-    }
-
     public static void Remove<T>(this IList<T> list, IEnumerable<T> toRemove)
     {
         Check.NotNull( list );
@@ -48,6 +39,15 @@ public static class ListExtensions
             T temp = list[i];
             list[i] = list[j];
             list[j] = temp;
+        }
+    }
+
+    private static void CheckInRange<T>( IList<T> list, int index, string parameterName )
+    {
+        if( index < 0 || index >= list.Count ) {
+            throw new IndexOutOfRangeException(
+                string.Format( "Parameter '{0}' out of range: {1} < 0 || {1} >= {2} ", parameterName, index, list.Count )
+            );
         }
     }
 }
