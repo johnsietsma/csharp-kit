@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using CircularBuffer;
 
 
-public struct MessageReceipt 
+public struct MessageReceipt
 {
-    public Type senderType;
+    public Type messageType;
+    public Type paramType;
+
+    public override string ToString() {
+        return string.Format("[MessageReceipt: {0}({1})]", messageType, paramType );
+    }
 }
 
-public class MessageLog : CircularBuffer<MessageReceipt> 
+[Serializable]
+public class MessageLog : CircularBuffer<MessageReceipt>
 {
     public MessageLog( int capacity ) : base(capacity,true) {}
 }
@@ -32,7 +38,10 @@ public class MessageLogger : MessageDecorator
 
     public override void Send<TMessage,TParam>( TParam param )
     {
-        log.Put( new MessageReceipt() );
+        log.Put( new MessageReceipt() {
+            messageType = typeof(TMessage),
+            paramType = typeof(TParam)
+            } );
         base.Send<TMessage,TParam>( param );
     }
 }

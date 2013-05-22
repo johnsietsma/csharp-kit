@@ -7,6 +7,8 @@ using System.Threading;
 
 namespace CircularBuffer
 {
+
+[Serializable]
 public class CircularBuffer<T> : ICollection<T>, IEnumerable<T>, ICollection, IEnumerable
 {
     private int capacity;
