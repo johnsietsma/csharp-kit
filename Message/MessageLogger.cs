@@ -5,11 +5,11 @@ using CircularBuffer;
 
 public struct MessageReceipt
 {
-    public Type messageType;
-    public Type paramType;
+    public Type MessageType;
+    public Type ParamType;
 
     public override string ToString() {
-        return string.Format("[MessageReceipt: {0}({1})]", messageType, paramType );
+        return string.Format("[MessageReceipt: {0}({1})]", MessageType, ParamType );
     }
 }
 
@@ -39,8 +39,8 @@ public class MessageLogger : MessageDecorator
     public override void Send<TMessage,TParam>( TParam param )
     {
         log.Put( new MessageReceipt() {
-            messageType = typeof(TMessage),
-            paramType = typeof(TParam)
+            MessageType = typeof(TMessage),
+            ParamType = typeof(TParam)
             } );
         base.Send<TMessage,TParam>( param );
     }
