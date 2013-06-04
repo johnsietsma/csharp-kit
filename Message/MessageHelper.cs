@@ -30,6 +30,7 @@ public class MessageHelper : IDisposable
         foreach( DecoratorDelegate del in decoratorDelegates ) {
             sender = del( sender );
         }
+        decoratorDelegates.Clear();
         senders.Add( sender );
         MessageSystem.Add( sender );
         return sender;

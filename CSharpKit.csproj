@@ -55,6 +55,7 @@
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Extensions\Tests\TestIEnumerableExtensions.cs" />
     <Compile Include="Keyframe\Keyframe.cs" />
     <Compile Include="Keyframe\Tests\TestTimeline.cs" />
     <Compile Include="Keyframe\Timeline.cs" />

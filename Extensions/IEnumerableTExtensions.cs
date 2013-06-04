@@ -36,6 +36,22 @@ public static class IEnumerableTExtensions
         }
     }
 
+    public static IEnumerable<T> Interleave<T>( this IEnumerable<T> first, IEnumerable<T> second )
+    {
+        var enumerators = new IEnumerator<T>[] { first.GetEnumerator(), second.GetEnumerator() };
+        try {
+            T[] currentValues;
+            do {
+                currentValues = enumerators.Where( e => e.MoveNext() ).Select( e => e.Current ).ToArray();
+                foreach( T v in currentValues ) yield return v;
+            }
+            while ( currentValues.Any() );
+        }
+        finally {
+            Array.ForEach( enumerators, e => e.Dispose() );
+        }
+    }
+
     // From: http://stackoverflow.com/questions/648196/random-row-from-linq-to-sql/648240#648240
     public static T Random<T>( this IEnumerable<T> source )
     {
