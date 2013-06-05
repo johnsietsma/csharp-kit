@@ -49,7 +49,7 @@ public static class MessageSystem
     {
         Array.ForEach( senders, s=>Add(s) );
         return senders;
-    }    
+    }
 
     public static IMessageSender[] Add<TParam>( Type messageType, params Action<TParam>[] senders )
     {
@@ -88,7 +88,7 @@ public static class MessageSystem
         return Remove( typeof( TMessage ), senders );
     }
 
-    public static void Remove( IMessageSender[] senders ) 
+    public static void Remove( IMessageSender[] senders )
     {
         Array.ForEach<IMessageSender>( senders, s=>Remove( s.MessageType, s.OriginalAction ) );
     }

@@ -4,6 +4,19 @@ using NUnit.Framework;
 public class TestMessageHelper
 {
     [Test]
+    public void TestMultipleFilters()
+    {
+        string message = "message";
+
+        MessageHelper mh = new MessageHelper();
+        mh.AddEqualityFilter( message ).Add<Message1, object>( m => Assert.AreEqual( m, message ) );
+        mh.AddInequalityFilter( message ).Add<Message1, object>( m => Assert.AreNotEqual( m, message ) );
+
+        MessageSystem.Send<Message1,object>( message );
+        MessageSystem.Send<Message1,object>( "some other message" );
+    }
+
+    [Test]
     public void TestAdd()
     {
         MessageSystem.Clear();

@@ -53,6 +53,12 @@ public class MessageHelper : IDisposable
         return this;
     }
 
+    public MessageHelper AddInequalityFilter( object notEqualsObject )
+    {
+        decoratorDelegates.Add( MakeInequalityFilterDelegate( notEqualsObject ) );
+        return this;
+    }
+
     public MessageHelper AddFilter( MessageFilterer.MessageFilter filter )
     {
         decoratorDelegates.Add( MakeFilterDelegate( filter ) );
@@ -85,6 +91,11 @@ public class MessageHelper : IDisposable
     public static DecoratorDelegate MakeEqualityFilterDelegate( object equalsObject )
     {
         return ( s )=>new MessageFilterer( s, ( mt,pt,p )=>p==equalsObject );
+    }
+
+    public static DecoratorDelegate MakeInequalityFilterDelegate( object notEqualsObject )
+    {
+        return ( s )=>new MessageFilterer( s, ( mt,pt,p )=>p!=notEqualsObject );
     }
 
     public static DecoratorDelegate MakeLoggingDelegate( MessageLog log )

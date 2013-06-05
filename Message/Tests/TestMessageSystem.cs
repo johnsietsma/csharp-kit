@@ -19,7 +19,7 @@ public class TestMessageSystem
     public void TestAdd_NonGeneric()
     {
         MessageSystem.Clear();
-        Type messageType = typeof(Message1); 
+        Type messageType = typeof(Message1);
         Assert.AreEqual( 0, MessageSystem.GetSenders<Message1,string>().Count() );
         MessageSystem.Add<string>( messageType, Listener1 );
         Assert.AreEqual( 1, MessageSystem.GetSenders<Message1,string>().Count() );
@@ -70,7 +70,7 @@ public class TestMessageSystem
         Assert.IsTrue( ret );
         Assert.AreEqual( 0, MessageSystem.GetSenders<Message1,string>().Count() );
         Assert.AreEqual( 1, MessageSystem.GetSenders<Message2,int>().Count() );
-    }    
+    }
 
     [Test]
     public void TestSend()
@@ -80,7 +80,7 @@ public class TestMessageSystem
         MessageSystem.Add<Message1,string>( o=>sent=true );
         MessageSystem.Send<Message1,string>( null );
         Assert.IsTrue( sent );
-    }    
+    }
 
 
     private class Message1 : IMessage<string> {}
