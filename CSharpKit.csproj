@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Collections\CircularBuffer.cs" />
+    <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="DSP\Filter.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
