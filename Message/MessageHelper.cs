@@ -11,18 +11,20 @@ public class MessageHelper : IDisposable
 
     ~MessageHelper()
     {
-        Dispose();
+        Clear();
     }
 
     public void Dispose()
     {
         Clear();
+        GC.SuppressFinalize( this );
     }
 
     public void Clear()
     {
+        if( senders==null ) { return; }
         MessageSystem.Remove( senders.ToArray() );
-        senders.Clear();
+        senders = null;
     }
 
     public virtual IMessageSender Add( IMessageSender sender )
@@ -84,7 +86,7 @@ public class MessageHelper : IDisposable
 
     public static DecoratorDelegate MakeParamFilterDelegate<TParam>( Func<TParam,bool> paramFilter )
     {
-        MessageFilterer.MessageFilter filter = (mt,pt,p)=>paramFilter((TParam)p);
+        MessageFilterer.MessageFilter filter = ( mt,pt,p )=>paramFilter( ( TParam )p );
         return ( s )=>new MessageFilterer( s, filter );
     }
 
