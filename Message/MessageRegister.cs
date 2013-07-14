@@ -19,6 +19,10 @@ public class MessageRegister
         Add<TParam>( typeof( TMessage ), actions );
     }
 
+    public void Remove<TMessage, TParam>( params Action<TParam>[] actions ) where TMessage : IMessage<TParam> {
+        MessageSystem.Remove<TMessage, TParam>( actions );
+    }
+
     public void Clear()
     {
         MessageSystem.Remove( removals.ToArray() );
